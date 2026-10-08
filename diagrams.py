@@ -835,3 +835,40 @@ def d_parker(slide, prs):
             anchor=MSO_ANCHOR.MIDDLE)
 
 REGISTRY["parker"] = d_parker
+
+
+# ---------- lamina: lo que dice AVIXA (RP-C303.01) ----------
+def d_avixa(slide, prs):
+    badge(slide, 0.92, 1.65, 2.7, 0.48, "AVIXA RP-C303.01", INDIGO, size=12.5)
+    textbox(slide, 3.8, 1.65, 8.6, 0.48,
+            [("Prácticas recomendadas de seguridad en sistemas AV en red. Todo lo que sigue está ahí.",
+              12, False, GREY, PP_ALIGN.LEFT)], anchor=MSO_ANCHOR.MIDDLE)
+    cards = [
+        (BLUE,    "Identidad y acceso",  "Cambiar la contraseña de fábrica antes de instalar; 12 caracteres o más; roles de administrador y usuario.", "§7.1"),
+        (ORANGE,  "Parches y firmware",  "Proceso definido; probar la actualización antes de aplicarla y saber qué cambia.", "§7.2"),
+        (TEAL,    "Cifrado",             "Si hay HTTPS, apagar HTTP. Sin TLS 1.1 ni SSLv3. Datos personales cifrados.", "§7.3"),
+        (MAGENTA, "Puertos y servicios", "Documentar entrantes y salientes; apagar lo que no se usa, como Telnet o FTP.", "§7.4, §7.7"),
+        (GREEN,   "VLAN propia para AV", "Separada de la corporativa; hacia ella solo por router con ACL. 802.1X o MAB.", "§7.5"),
+        (INDIGO,  "Documentar y acordar","Inventario, topología con VLAN y ACL, roles. Responsabilidades por escrito con IT.", "§9.1, §9.2"),
+    ]
+    w = 3.63; h = 1.38; gap = 0.3; vgap = 0.22; top = 2.4
+    for i, (col, head, desc, ref) in enumerate(cards):
+        x = 0.92 + (i % 3) * (w + gap); y = top + (i // 3) * (h + vgap)
+        rrect(slide, x, y, w, h, WHITE, line=RGBColor(0xDD,0xDD,0xE5), radius=0.06)
+        rrect(slide, x, y, w, 0.1, col, radius=0.0)
+        tb = slide.shapes.add_textbox(Inches(x + 0.18), Inches(y + 0.14), Inches(w - 0.36), Inches(h - 0.24))
+        tf = tb.text_frame; tf.word_wrap = True; tf.vertical_anchor = MSO_ANCHOR.TOP
+        p = tf.paragraphs[0]; r = p.add_run(); r.text = head
+        r.font.size = Pt(13); r.font.bold = True; r.font.color.rgb = col; r.font.name = FONT
+        p.space_after = Pt(4)
+        p2 = tf.add_paragraph(); r2 = p2.add_run(); r2.text = desc
+        r2.font.size = Pt(10.5); r2.font.color.rgb = INDIGO; r2.font.name = FONT
+        p2.space_after = Pt(3)
+        p3 = tf.add_paragraph(); r3 = p3.add_run(); r3.text = ref
+        r3.font.size = Pt(9); r3.font.bold = True; r3.font.color.rgb = GREY; r3.font.name = FONT
+    textbox(slide, 0.92, 5.72, 11.5, 0.5, [
+        ("ANSI/AVIXA D402.02 añade el cuándo: se verifica en integración, post-integración y cierre.", 10.5, False, GREY, PP_ALIGN.CENTER),
+        ("Es el estándar del gremio. Pedirlo no es ser exigente: es cumplirlo.", 12.5, True, INDIGO, PP_ALIGN.CENTER),
+    ], anchor=MSO_ANCHOR.MIDDLE)
+
+REGISTRY["avixa"] = d_avixa

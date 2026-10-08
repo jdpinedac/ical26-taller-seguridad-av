@@ -216,6 +216,11 @@ SLIDES = [
   },
   {
     "kind": "content",
+    "title": "Lo que dice AVIXA",
+    "diagram": "avixa",
+  },
+  {
+    "kind": "content",
     "title": "Qué proponer: seguridad por fase del proyecto",
     "diagram": 'fases',
     "bullets": [
