@@ -20,3 +20,5 @@ assets/photos/t_*.png
 assets/photos/*prev*.png
 assets/logos/*_s.png
 kit/assets/*_s.png
+# Guion del presentador (notas internas, no públicas)
+guion/
