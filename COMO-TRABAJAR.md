@@ -1,28 +1,29 @@
 # Generador del taller ICAL26
 
-Todo el código vive aquí, en Dropbox, así viaja entre máquinas y queda junto al
-resto del proyecto. El entorno Python (`.venv`) y el control de versiones (`.git`)
-se mantienen FUERA de Dropbox a propósito (Dropbox corrompe los `.git`).
+Todo vive aquí, en Dropbox: el código, el repositorio git y los materiales.
+Así viaja entre máquinas y queda junto al proyecto.
 
-## Preparar el entorno (una vez por máquina, fuera de Dropbox)
+- El `.git` **sí** se sincroniza por Dropbox (viaja contigo). GitHub es el respaldo.
+- El `.venv` **no** se sincroniza (un entorno de Linux no sirve en otra plataforma).
+  Se recrea en cada máquina.
 
-    python3 -m venv ~/ical26-venv
-    ~/ical26-venv/bin/pip install -r requirements.txt
-    # Requiere además: pandoc y libreoffice instalados en el sistema.
+## Preparar el entorno (una vez por máquina)
+
+    python3 -m venv .venv
+    .venv/bin/pip install -r requirements.txt
+    # Requiere además pandoc y libreoffice instalados en el sistema.
 
 ## Generar
 
-    V=~/ical26-venv/bin/python     # o el venv que hayas creado
-    $V build.py                    # deck -> ICAL26-seguridad-AV-parte1.pptx/.pdf
-    cd kit && pandoc kit.md -o body_frag.html && $V build_kit_wp.py && cd ..
+    .venv/bin/python build.py                 # deck (.pptx + .pdf)
+    cd kit && pandoc kit.md -o body_frag.html && ../.venv/bin/python build_kit_wp.py && cd ..
 
-Para publicar a la vez los PDF en las carpetas del evento:
+Para publicar los PDF en las carpetas del evento al generar:
 
-    ICAL26_PUBLISH_DIR="../slides" $V build.py
+    ICAL26_PUBLISH_DIR="../slides" .venv/bin/python build.py
 
 ## Publicar la página (GitHub Pages)
 
     ./publicar.sh "mensaje del cambio"
 
-Sincroniza esta carpeta con el repo espejo (~/src/ical26-slides) y hace push.
-La página queda en https://jdpinedac.github.io/ical26-taller-seguridad-av/
+Página: https://jdpinedac.github.io/ical26-taller-seguridad-av/
