@@ -49,6 +49,8 @@ Proyecto: ____________________   Cliente: ____________________   Fecha: ________
 ☐ Está definido quién administra el equipo después de la entrega.  
 ☐ Está acordado por escrito con IT quién responde por cada elemento de seguridad del sistema (RP-C303.01 §9.1).  
 ☐ La red AV va en VLAN propia; hacia la corporativa solo por router con lista de control de acceso; 802.1X o MAB donde el equipo lo soporte (RP-C303.01 §7.5).  
+☐ Se revisó qué partes de la política de seguridad de IT no cubren el equipo AV, y quedó definido quién las cubre; no se asume que IT lo hará (RP-C303.01 §7.9).  
+☐ Las redes inalámbricas del sistema AV tienen configuración estándar documentada y no comparten segmento con la red de invitados (RP-C303.01 §8.8).  
 
 ### Implementación
 
@@ -58,11 +60,11 @@ Proyecto: ____________________   Cliente: ____________________   Fecha: ________
 ☐ La gestión va por canal cifrado: HTTPS activo y HTTP apagado, sin TLS 1.1 ni SSLv3, con certificado válido donde el equipo lo permita (RP-C303.01 §7.3).  
 ☐ El firmware está en la última versión estable y quedó anotada.  
 ☐ El equipo está en su VLAN y se verificó que no alcanza la red corporativa ni la de invitados.  
-☐ El acceso físico al rack está controlado y los puertos de red sin uso están deshabilitados.  
-☐ Se hizo una verificación sobre la red del proyecto, con autorización del cliente, y se guardó el resultado.  
+☐ El acceso físico al rack está controlado y los puertos de red sin uso están deshabilitados (RP-C303.01 §8.1).  
+☐ Se hizo una verificación sobre la red del proyecto, con autorización del cliente, y se guardó el resultado (RP-C303.01 §7.8).  
 ☐ Contraseñas de al menos 12 caracteres, cuentas individuales y roles de administrador y usuario separados (RP-C303.01 §7.1).  
 ☐ Los códecs de videoconferencia no responden llamadas automáticamente (RP-C303.01 §5.2.2).  
-☐ Las actualizaciones de firmware se probaron antes de aplicarlas; la VPN de soporte queda apagada cuando no se usa (RP-C303.01 §7.2, §7.6).  
+☐ Las actualizaciones de firmware se probaron antes de aplicarlas; la VPN de soporte queda apagada cuando no se usa (RP-C303.01 §7.2, §7.6; ANSI/AVIXA D402.02, IT-115).  
 ☐ Se retiraron las credenciales temporales usadas durante la puesta en marcha (ANSI/AVIXA D402.02, IT-113).  
 
 ### Entrega
@@ -70,15 +72,17 @@ Proyecto: ____________________   Cliente: ____________________   Fecha: ________
 ☐ Está documentada la lista de puertos y servicios de cada equipo, para IT.  
 ☐ Los registros de eventos están activos y se envían a donde IT los pueda ver.  
 ☐ Hay responsable y calendario para las actualizaciones de firmware.  
-☐ Existe respaldo de la configuración de cada equipo, guardado fuera del propio equipo.  
+☐ Existe respaldo de la configuración de cada equipo, guardado fuera del propio equipo, y un procedimiento para cambiarla (RP-C303.01 §8.7).  
 ☐ El cliente recibió el inventario: equipo, ubicación, dirección, versión de firmware y cuenta administradora.  
 ☐ Quedó acordado qué hacer ante un incidente: a quién se avisa y qué se aísla primero.  
 ☐ Las credenciales de administración se entregaron de forma segura.  
 ☐ Inventario de cada equipo con puertos, protocolos y servicios, entrantes y salientes (RP-C303.01 §7.4, §9.2).  
-☐ Topología física y lógica con VLAN, listas de control de acceso y puntos de conexión (RP-C303.01 §9.2).  
+☐ Topología física y lógica con VLAN, listas de control de acceso y puntos de conexión (RP-C303.01 §9.2; ANSI/AVIXA D402.02, IT-110).  
 ☐ Roles y permisos documentados, y custodia segura de las contraseñas (RP-C303.01 §9.2).  
 ☐ Registro de accesos y cambios activo, conservado al menos 18 meses (RP-C303.01 §8.5).  
 ☐ Verificación documentada por fase, con esquema IP, seguridad de red y seguridad inalámbrica comprobadas contra lo documentado (ANSI/AVIXA D402.02, IT-104, IT-107, IT-101).  
+☐ Las herramientas de gestión remota del sistema, como paneles virtuales o aplicaciones del fabricante, quedaron configuradas con acceso restringido y comprobadas (ANSI/AVIXA D402.02, IT-116).  
+☐ Toda la documentación de seguridad del sistema está consolidada en un solo documento entregado al cliente (RP-C303.01 §7.10).  
 
 ---
 
