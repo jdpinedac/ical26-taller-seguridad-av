@@ -130,7 +130,7 @@ def d_pecados(slide, prs):
         (GREEN,   "Sin visibilidad", "Ni logs ni monitoreo: nadie ve lo que pasa.", "Ej.: un acceso raro que nadie registra."),
         (RED,     "Acceso físico al rack", "Diez segundos frente al equipo alcanzan.", "Ej.: un puerto libre en el switch."),
     ]
-    w = 3.63; h = 2.15; gap = 0.3; vgap = 0.3; top = 1.9
+    w = 3.63; h = 2.0; gap = 0.3; vgap = 0.25; top = 1.9
     for i, (col, head, desc, ej) in enumerate(cards):
         x = 0.92 + (i % 3) * (w + gap)
         y = top + (i // 3) * (h + vgap)
@@ -146,6 +146,9 @@ def d_pecados(slide, prs):
         p2.space_after = Pt(5)
         p3 = tf.add_paragraph(); r3 = p3.add_run(); r3.text = ej
         r3.font.size = Pt(9.5); r3.font.bold = True; r3.font.color.rgb = col; r3.font.name = FONT
+    textbox(slide, 0.92, 6.22, 11.5, 0.3,
+            [("Son las vulnerabilidades comunes que describe AVIXA RP-C303.01, §5.2.", 10, False, GREY, PP_ALIGN.CENTER)],
+            anchor=MSO_ANCHOR.MIDDLE)
 
 def d_criterios(slide, prs):
     # marco: defensa en profundidad
@@ -183,7 +186,7 @@ def d_hardening(slide, prs):
         ("El equipo sale de tu mano ya endurecido. No esperas a que IT lo exija.", 12, False, LILAC, PP_ALIGN.CENTER),
     ])
     items = [
-        (BLUE,   "Credenciales", "Cambiar toda credencial de fábrica; usar cuentas administradas."),
+        (BLUE,   "Credenciales", "Cambiar las de fábrica y retirar las temporales de la instalación; cuentas administradas."),
         (ORANGE, "Superficie", "Apagar servicios y protocolos sin uso: Telnet, mDNS, UPnP."),
         (TEAL,   "Firmware", "Actualizar y acordar quién lo mantiene en el tiempo."),
         (MAGENTA,"Cifrado", "Control y gestión cifrados; nada de HTTP plano ni Telnet."),
@@ -202,8 +205,9 @@ def d_hardening(slide, prs):
         r = p.add_run(); r.text = head; r.font.size = Pt(12.5); r.font.bold = True; r.font.color.rgb = col; r.font.name = FONT
         p2 = tf.add_paragraph(); p2.alignment = PP_ALIGN.CENTER
         r2 = p2.add_run(); r2.text = desc; r2.font.size = Pt(10); r2.font.color.rgb = GREY; r2.font.name = FONT
-    textbox(slide, 0.92, 5.15, 11.5, 0.5,
-            [("Cinco cosas antes de entregar. Si el cliente no las pide, las haces igual.", 13, True, INDIGO, PP_ALIGN.CENTER)],
+    textbox(slide, 0.92, 5.1, 11.5, 0.8,
+            [("Cinco cosas antes de entregar. Si el cliente no las pide, las haces igual.", 13, True, INDIGO, PP_ALIGN.CENTER),
+             ("Alineado con la línea base de seguridad de AVIXA RP-C303.01, §7.", 10.5, False, GREY, PP_ALIGN.CENTER)],
             anchor=MSO_ANCHOR.MIDDLE)
 
 def d_cia(slide, prs):
@@ -415,9 +419,11 @@ def d_fases(slide, prs):
             p = tf.paragraphs[0] if j == 0 else tf.add_paragraph(); p.space_after = Pt(6)
             r = p.add_run(); r.text = "\u2022  " + it
             r.font.size = Pt(11.5); r.font.color.rgb = INDIGO; r.font.name = FONT
-    textbox(slide, 0.92, ctop + ch + 0.25, 11.5, 0.55,
+    textbox(slide, 0.92, ctop + ch + 0.2, 11.5, 0.85,
             [("La seguridad se diseña desde el día uno. No es un parche que se agrega al final.",
-              14, True, INDIGO, PP_ALIGN.CENTER)], anchor=MSO_ANCHOR.MIDDLE)
+              14, True, INDIGO, PP_ALIGN.CENTER),
+             ("ANSI/AVIXA D402.02 formaliza esta verificación por fase: pre-integración, integración, post-integración y cierre.",
+              10.5, False, GREY, PP_ALIGN.CENTER)], anchor=MSO_ANCHOR.MIDDLE)
 
 def d_segmentacion(slide, prs):
     bw = 5.2; gap = 1.1; xs = [0.92, 0.92 + bw + gap]
@@ -428,7 +434,7 @@ def d_segmentacion(slide, prs):
     row(1.85, 1.05, [(BLUE, "VLAN AV", "dispositivos AV aislados"),
                      (TEAL, "VLAN de control", "plano de gestión separado")])
     fw = rrect(slide, 0.92, 3.1, bw*2 + gap, 0.6, ORANGE, radius=0.3)
-    _settext(fw.text_frame, [("Firewall con reglas explícitas: solo lo necesario pasa", 12.5, True, WHITE, PP_ALIGN.CENTER)])
+    _settext(fw.text_frame, [("Firewall con reglas explícitas: solo lo necesario pasa   ·   AVIXA RP-C303.01 §7.5", 12, True, WHITE, PP_ALIGN.CENTER)])
     # reglas en semaforo
     rules = [
         (GREEN,  "De control a AV", "gestión cifrada (SSH, HTTPS)"),
@@ -496,22 +502,27 @@ def d_osi(slide, prs):
               11.5, False, GREY, PP_ALIGN.CENTER)], anchor=MSO_ANCHOR.MIDDLE)
 
 # ---------- lámina de referencias (enlaces clicables) ----------
-def _ref_item(slide, x, y, w, color, name, desc, url, full):
-    rrect(slide, x, y, w, 1.02, WHITE, line=RGBColor(0xDD,0xDD,0xE5), radius=0.08)
-    rrect(slide, x, y, 0.12, 1.02, color, radius=0.0)
-    tb = slide.shapes.add_textbox(Inches(x+0.22), Inches(y+0.06), Inches(w-0.3), Inches(0.92))
-    tf = tb.text_frame; tf.word_wrap = True
+def _ref_item(slide, x, y, w, color, name, desc, url, full, h=1.02, s_name=13, s_desc=10.5):
+    rrect(slide, x, y, w, h, WHITE, line=RGBColor(0xDD,0xDD,0xE5), radius=0.08)
+    rrect(slide, x, y, 0.12, h, color, radius=0.0)
+    tb = slide.shapes.add_textbox(Inches(x+0.2), Inches(y+0.05), Inches(w-0.28), Inches(h-0.1))
+    tf = tb.text_frame; tf.word_wrap = True; tf.vertical_anchor = MSO_ANCHOR.MIDDLE
     p = tf.paragraphs[0]; r = p.add_run(); r.text = name
-    r.font.size = Pt(13); r.font.bold = True; r.font.color.rgb = INDIGO; r.font.name = FONT
+    r.font.size = Pt(s_name); r.font.bold = True; r.font.color.rgb = INDIGO; r.font.name = FONT
     p2 = tf.add_paragraph(); r2 = p2.add_run(); r2.text = desc
-    r2.font.size = Pt(10.5); r2.font.color.rgb = GREY; r2.font.name = FONT
+    r2.font.size = Pt(s_desc); r2.font.color.rgb = GREY; r2.font.name = FONT
     p3 = tf.add_paragraph(); r3 = p3.add_run(); r3.text = url
-    r3.font.size = Pt(10.5); r3.font.bold = True; r3.font.color.rgb = BLUE; r3.font.name = FONT
+    r3.font.size = Pt(s_desc); r3.font.bold = True; r3.font.color.rgb = BLUE; r3.font.name = FONT
     r3.hyperlink.address = full
 
 def d_referencias(slide, prs):
-    textbox(slide, 0.92, 1.6, 5.5, 0.4, [("Marcos", 15, True, INDIGO, PP_ALIGN.LEFT)])
-    textbox(slide, 6.5, 1.6, 5.8, 0.4, [("Herramientas y lecturas", 15, True, INDIGO, PP_ALIGN.LEFT)])
+    cx = [0.92, 4.72, 8.52]; cw = [3.55, 3.55, 3.9]
+    for x, w, t in zip(cx, cw, ("Estándares AVIXA", "Marcos", "Herramientas y lecturas")):
+        textbox(slide, x, 1.6, w, 0.4, [(t, 13.5, True, INDIGO, PP_ALIGN.LEFT)])
+    avixa = [
+        (INDIGO, "AVIXA RP-C303.01", "Prácticas recomendadas de seguridad en sistemas AV en red. La línea base de este taller.", "avixa.org/standards", "https://www.avixa.org/standards"),
+        (BLUE,   "ANSI/AVIXA D402.02", "Verificación de desempeño de sistemas AV, por fases del proyecto.", "avixa.org/standards", "https://www.avixa.org/standards"),
+    ]
     marcos = [
         (BLUE,   "NIST CSF 2.0", "Marco de gestión de riesgo que usa IT.", "nist.gov/cyberframework", "https://www.nist.gov/cyberframework"),
         (MAGENTA,"MITRE ATT&CK", "Catálogo de tácticas y técnicas reales.", "attack.mitre.org", "https://attack.mitre.org"),
@@ -524,16 +535,18 @@ def d_referencias(slide, prs):
         (INDIGO, "MITRE ATT&CK explicado", "Qué es una táctica y una técnica (con video).", "ibm.com/think/mitre-attack", "https://www.ibm.com/mx-es/think/topics/mitre-attack"),
     ]
     y = 2.1
-    for col, n, d, u, f in marcos:
-        _ref_item(slide, 0.92, y, 5.4, col, n, d, u, f); y += 1.14
+    for col, n, de, u, f in avixa:
+        _ref_item(slide, cx[0], y, cw[0], col, n, de, u, f, h=1.6, s_name=12, s_desc=9.5); y += 1.75
     y = 2.1
-    for col, n, d, u, f in herr:
-        _ref_item(slide, 6.5, y, 5.4, col, n, d, u, f); y += 1.14
-    note = rrect(slide, 6.5, y+0.03, 5.1, 0.85, PALE, radius=0.08)
+    for col, n, de, u, f in marcos:
+        _ref_item(slide, cx[1], y, cw[1], col, n, de, u, f, h=1.0, s_name=11.5, s_desc=9); y += 1.1
+    y = 2.1
+    for col, n, de, u, f in herr:
+        _ref_item(slide, cx[2], y, cw[2], col, n, de, u, f, h=1.0, s_name=11.5, s_desc=9); y += 1.1
+    note = rrect(slide, cx[2], y + 0.05, cw[2], 0.9, PALE, radius=0.08)
     _settext(note.text_frame, [
-        ("En el kit descargable:", 11.5, True, INDIGO, PP_ALIGN.LEFT),
-        ("Checklist de hardening, el laboratorio en máquina virtual y el guion de preguntas de IT con respuestas.",
-         10, False, GREY, PP_ALIGN.LEFT),
+        ("En el kit descargable:", 11, True, INDIGO, PP_ALIGN.LEFT),
+        ("Checklist de hardening, guía del laboratorio y guion de preguntas de IT.", 9.5, False, GREY, PP_ALIGN.LEFT),
     ], anchor=MSO_ANCHOR.MIDDLE)
 
 REGISTRY["osi"] = d_osi
@@ -665,7 +678,7 @@ def d_preguntas(slide, prs):
         (TEAL,    "¿Cómo se gestionan las credenciales?",     "Cuentas administradas; nada de fábrica."),
         (MAGENTA, "¿Cómo actualizamos y monitoreamos?",       "Plan de firmware y logs hacia su sistema de monitoreo (en su jerga, SIEM)."),
     ]
-    qw = 4.6; aw = 11.5 - qw - 0.35; top = 1.8; h = 0.9; gap = 0.18
+    qw = 4.6; aw = 11.5 - qw - 0.35; top = 1.8; h = 0.82; gap = 0.15
     for i, (col, q, a) in enumerate(qa):
         y = top + i * (h + gap)
         qb = rrect(slide, 0.92, y, qw, h, col, radius=0.1)
@@ -673,9 +686,10 @@ def d_preguntas(slide, prs):
         arrow(slide, 0.92 + qw + 0.03, y + h/2, 0.92 + qw + 0.32, y + h/2, color=col, width=2.0)
         ab = rrect(slide, 0.92 + qw + 0.35, y, aw, h, WHITE, line=col, radius=0.1)
         _settext(ab.text_frame, [(a, 12, False, INDIGO, PP_ALIGN.LEFT)])
-    textbox(slide, 0.92, top + 4*(h+gap) + 0.1, 11.5, 0.5,
-            [("Tener esto listo convierte la revisión de IT en un trámite, no en un freno.", 13.5, True, INDIGO, PP_ALIGN.CENTER)],
-            anchor=MSO_ANCHOR.MIDDLE)
+    textbox(slide, 0.92, top + 4*(h+gap) + 0.08, 11.5, 0.8,
+            [("Tener esto listo convierte la revisión de IT en un trámite, no en un freno.", 13.5, True, INDIGO, PP_ALIGN.CENTER),
+             ("Es la documentación que pide AVIXA RP-C303.01 §9.2: puertos y servicios, topología con VLAN y ACL, roles y permisos.",
+              10.5, False, GREY, PP_ALIGN.CENTER)], anchor=MSO_ANCHOR.MIDDLE)
 
 REGISTRY["preguntas"] = d_preguntas
 

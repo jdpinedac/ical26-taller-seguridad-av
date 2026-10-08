@@ -36,6 +36,8 @@ Consulta la legislación vigente de tu país. Las opiniones de este material son
 Esta lista es una **base, no un checklist exhaustivo**. Adáptala a cada proyecto y a las políticas del cliente. Fuera de tu laboratorio, aplícala solo sobre sistemas para los que tengas autorización.
 :::
 
+Esta lista está alineada con **AVIXA RP-C303.01** (prácticas recomendadas de seguridad en sistemas AV en red) y con **ANSI/AVIXA D402.02** (verificación de desempeño por fases del proyecto). Entre paréntesis, la sección que respalda cada punto.
+
 Proyecto: ____________________   Cliente: ____________________   Fecha: __________
 
 ### Diseño
@@ -45,17 +47,23 @@ Proyecto: ____________________   Cliente: ____________________   Fecha: ________
 ☐ Los equipos elegidos soportan gestión cifrada, cuentas con roles y actualización de firmware firmada.  
 ☐ Está definido qué tráfico necesita cruzar entre segmentos y qué queda bloqueado.  
 ☐ Está definido quién administra el equipo después de la entrega.  
+☐ Está acordado por escrito con IT quién responde por cada elemento de seguridad del sistema (RP-C303.01 §9.1).  
+☐ La red AV va en VLAN propia; hacia la corporativa solo por router con lista de control de acceso; 802.1X o MAB donde el equipo lo soporte (RP-C303.01 §7.5).  
 
 ### Implementación
 
-☐ Se cambiaron todas las credenciales de fábrica; no queda ninguna cuenta por defecto activa.  
+☐ Se cambiaron todas las credenciales de fábrica antes de instalar; no queda ninguna cuenta por defecto activa (RP-C303.01 §7.1.2).  
 ☐ Las cuentas son nominales o gestionadas; nada de una contraseña compartida.  
 ☐ Los servicios y protocolos sin uso están apagados.  
-☐ La gestión del equipo va por canal cifrado, con certificado válido donde el equipo lo permita.  
+☐ La gestión va por canal cifrado: HTTPS activo y HTTP apagado, sin TLS 1.1 ni SSLv3, con certificado válido donde el equipo lo permita (RP-C303.01 §7.3).  
 ☐ El firmware está en la última versión estable y quedó anotada.  
 ☐ El equipo está en su VLAN y se verificó que no alcanza la red corporativa ni la de invitados.  
 ☐ El acceso físico al rack está controlado y los puertos de red sin uso están deshabilitados.  
 ☐ Se hizo una verificación sobre la red del proyecto, con autorización del cliente, y se guardó el resultado.  
+☐ Contraseñas de al menos 12 caracteres, cuentas individuales y roles de administrador y usuario separados (RP-C303.01 §7.1).  
+☐ Los códecs de videoconferencia no responden llamadas automáticamente (RP-C303.01 §5.2.2).  
+☐ Las actualizaciones de firmware se probaron antes de aplicarlas; la VPN de soporte queda apagada cuando no se usa (RP-C303.01 §7.2, §7.6).  
+☐ Se retiraron las credenciales temporales usadas durante la puesta en marcha (ANSI/AVIXA D402.02, IT-113).  
 
 ### Entrega
 
@@ -66,8 +74,22 @@ Proyecto: ____________________   Cliente: ____________________   Fecha: ________
 ☐ El cliente recibió el inventario: equipo, ubicación, dirección, versión de firmware y cuenta administradora.  
 ☐ Quedó acordado qué hacer ante un incidente: a quién se avisa y qué se aísla primero.  
 ☐ Las credenciales de administración se entregaron de forma segura.  
+☐ Inventario de cada equipo con puertos, protocolos y servicios, entrantes y salientes (RP-C303.01 §7.4, §9.2).  
+☐ Topología física y lógica con VLAN, listas de control de acceso y puntos de conexión (RP-C303.01 §9.2).  
+☐ Roles y permisos documentados, y custodia segura de las contraseñas (RP-C303.01 §9.2).  
+☐ Registro de accesos y cambios activo, conservado al menos 18 meses (RP-C303.01 §8.5).  
+☐ Verificación documentada por fase, con esquema IP, seguridad de red y seguridad inalámbrica comprobadas contra lo documentado (ANSI/AVIXA D402.02, IT-104, IT-107, IT-101).  
 
 ---
+
+### Verificación por fases, según ANSI/AVIXA D402.02
+
+El estándar formaliza cuándo se verifica cada cosa. Este checklist sigue esas fases:
+
+- **Pre-integración:** condiciones previas y lo acordado con IT antes de instalar (nuestra fase de diseño).
+- **Integración de sistemas:** configuración mientras se instala (nuestra fase de implementación).
+- **Post-integración:** desempeño contra lo documentado, incluidos los ítems de IT: seguridad de red, esquema IP, inalámbrico, identidad.
+- **Cierre:** documentación as-built, transferencia y acta de conformidad firmada (nuestra fase de entrega).
 
 ## 3. Guion de preguntas de IT, con respuestas y evidencia
 
@@ -85,7 +107,7 @@ Llega a la reunión con estas respuestas listas.
 | ¿Qué acceso remoto tiene el fabricante o el integrador? | Solo el acordado, por canal cifrado y revocable. | Lista de accesos y cómo se desactivan. |
 | ¿Hay respaldo de la configuración? | Sí, fuera del equipo, con fecha. | Ubicación y fecha del último respaldo. |
 | ¿Qué pasa si un equipo se compromete? | Está aislado en su segmento; hay un contacto definido. | Procedimiento breve de respuesta. |
-| ¿Quién administra el equipo tras la entrega? | Definido en el contrato. | Acta de entrega con responsabilidades. |
+| ¿Quién administra el equipo tras la entrega? | Definido en el contrato, elemento por elemento. | Acta de entrega con responsabilidades de seguridad (RP-C303.01 §9.1). |
 
 ---
 
@@ -142,6 +164,8 @@ Alternativa sin USB: si prefieres no arrancar desde la memoria, puedes correr la
 
 ## 5. Referencias
 
+- AVIXA RP-C303.01, Prácticas recomendadas de seguridad en sistemas AV en red: [avixa.org/standards](https://www.avixa.org/standards)
+- ANSI/AVIXA D402.02, Verificación de desempeño de sistemas audiovisuales: [avixa.org/standards](https://www.avixa.org/standards)
 - NIST Cybersecurity Framework 2.0: [nist.gov/cyberframework](https://www.nist.gov/cyberframework)
 - MITRE ATT&CK: [attack.mitre.org](https://attack.mitre.org)
 - MITRE ATT&CK explicado, con video: [ibm.com/mx-es/think/topics/mitre-attack](https://www.ibm.com/mx-es/think/topics/mitre-attack)
