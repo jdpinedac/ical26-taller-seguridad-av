@@ -1,0 +1,22 @@
+# Entorno y temporales
+.venv/
+__pycache__/
+*.pyc
+*.tmp
+# Diseño del template de AVIXA y su marca (no redistribuir)
+template.pptx
+*.pptx
+assets/logos/infocomm*.png
+assets/logos/ical-lockup.png
+kit/assets/infocomm*.png
+# Artefactos de build (se regeneran)
+/ICAL26-seguridad-AV-parte1.pdf
+kit/ICAL26-kit.pdf
+kit/kit_full.html
+kit/body_frag.html
+assets/photos/*.orig.jpg
+# Miniaturas y temporales de trabajo
+assets/photos/t_*.png
+assets/photos/*prev*.png
+assets/logos/*_s.png
+kit/assets/*_s.png

@@ -1,0 +1,10 @@
+
+   Iniciar sesión
+
+   Usuario       admin
+   Contraseña    admin
+
+   [ Entrar ]
+
+   Acceso concedido. Sesión iniciada como admin.
+   Aviso: credenciales de fábrica sin cambiar.

@@ -1,0 +1,6 @@
+  12   0.000000   192.168.50.23    224.0.0.251    MDNS      318     Standard query response 0x0000  PTR _airplay._tcp.local  Presentador-SalaJuntas
+  13   0.000412   192.168.50.23    224.0.0.251    MDNS      292     Standard query response 0x0000  TXT model=presenter-gw fw=2.6.1 features=0x5A7FFFF7
+  14   0.003118   192.168.50.44    224.0.0.251    MDNS      101     Standard query 0x0000  PTR _googlecast._tcp.local  "QM" question
+  15   0.003590   192.168.50.23    224.0.0.251    MDNS      264     Standard query response 0x0000  SRV Presentador-SalaJuntas._airplay._tcp.local  port 7000
+  16   0.010204   192.168.50.1     224.0.0.251    MDNS       88     Standard query 0x0000  PTR _services._dns-sd._udp.local
+  17   0.011877   192.168.50.23    224.0.0.251    MDNS      240     Standard query response 0x0000  A Presentador-SalaJuntas.local  192.168.50.23

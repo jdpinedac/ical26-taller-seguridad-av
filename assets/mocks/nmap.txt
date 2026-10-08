@@ -1,0 +1,19 @@
+$ nmap -sV 192.168.50.0/24
+
+Starting Nmap 7.95 ( https://nmap.org )
+
+Nmap scan report for router.lab (192.168.50.1)
+Host is up (0.0021s latency).
+PORT      STATE SERVICE    VERSION
+53/tcp    open  domain     dnsmasq 2.86
+80/tcp    open  http       lighttpd 1.4.59
+
+Nmap scan report for presentador.lab (192.168.50.23)
+Host is up (0.0034s latency).
+PORT      STATE SERVICE    VERSION
+22/tcp    open  ssh        Dropbear sshd 2019.78
+80/tcp    open  http       panel de administración  (sin TLS)
+443/tcp   open  ssl/http   certificado autofirmado
+5353/udp  open  mdns       anuncia _airplay._tcp, _googlecast._tcp
+
+Nmap done: 256 IP addresses (3 hosts up) scanned in 6.21 seconds

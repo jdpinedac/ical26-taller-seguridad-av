@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>kit</title>
+  <style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">@page { margin: 1.8cm; }
+body { font-family: "Montserrat", sans-serif; font-size: 10.5pt; color: #222; line-height: 1.45; }
+h1 { color: #341E66; font-size: 20pt; border-bottom: 3px solid #007EE5; padding-bottom: 6px; }
+h2 { color: #341E66; font-size: 14pt; margin-top: 22px; border-bottom: 1px solid #DDD; padding-bottom: 3px; }
+h3 { color: #007EE5; font-size: 11.5pt; margin-bottom: 4px; }
+strong { color: #341E66; }
+a { color: #007EE5; text-decoration: none; }
+table { border-collapse: collapse; width: 100%; font-size: 9.5pt; margin: 8px 0; }
+th { background: #341E66; color: #fff; text-align: left; padding: 6px 8px; }
+td { border: 1px solid #D8D8DE; padding: 5px 8px; vertical-align: top; }
+tr:nth-child(even) td { background: #F4F5F8; }
+ul { margin: 4px 0; }
+li { margin: 3px 0; }
+hr { border: none; border-top: 1px solid #E0E0E6; margin: 18px 0; }
+code { background: #F0F0F3; padding: 1px 4px; border-radius: 3px; color: #341E66; }
+#title-block-header { display: none; }
+</style>
+</head>
+<body>
+<h1 id="kit-del-taller-ical26">Kit del taller — ICAL26</h1>
+<p><strong>Cuando IT frena tu proyecto AV: seguridad que se diseña, no
+se parcha</strong></p>
+<p>InfoComm América Latina 2026 · Ciudad de México · 22 de octubre de
+2026</p>
+<p>Juan Pineda · Pyxis | Eduardo Travi · AVI SPL</p>
+<p>Este kit reúne lo que prometimos en la sesión: una lista de
+verificación para endurecer tus proyectos, el guion de preguntas que IT
+suele hacer con sus respuestas, y una guía para montar tu propio
+laboratorio aislado y practicar con responsabilidad.</p>
+<p><strong>Contenido</strong></p>
+<ol type="1">
+<li>Uso responsable y marco legal</li>
+<li>Checklist de hardening por fase del proyecto</li>
+<li>Guion de preguntas de IT, con respuestas y evidencia</li>
+<li>Guía del laboratorio: red aislada y USB de arranque</li>
+<li>Referencias</li>
+</ol>
+<hr />
+<h2 id="uso-responsable-y-marco-legal">1. Uso responsable y marco
+legal</h2>
+<p>Todo el contenido de este kit tiene fines educativos: aprender a
+diseñar, endurecer y defender instalaciones AV.</p>
+<p>Probar o analizar sistemas sin autorización escrita del dueño está
+penado por la ley. Hazlo únicamente sobre tu propio laboratorio, en una
+red aislada y con equipos que te pertenecen o para los que tienes
+autorización expresa y por escrito. Nunca sobre la red de un evento, de
+tu empresa o de un cliente.</p>
+<p>Referencias legales, a modo de ejemplo y sin pretender ser asesoría
+legal:</p>
+<ul>
+<li>Colombia: Ley 1273 de 2009, artículo 269A.</li>
+<li>Argentina: Ley 26.388, artículo 153 bis del Código Penal.</li>
+<li>México: Código Penal Federal, artículos 211 bis 1 a 211 bis 7.</li>
+</ul>
+<p>Consulta la legislación vigente de tu país. Las opiniones de este
+material son de los presentadores y no representan a fabricantes ni a
+los organizadores.</p>
+<hr />
+<h2 id="checklist-de-hardening-por-fase-del-proyecto">2. Checklist de
+hardening por fase del proyecto</h2>
+<p>Úsala proyecto por proyecto. Cada punto cumplido es una pregunta
+menos de IT.</p>
+<p>Proyecto: ____________________ Cliente: ____________________ Fecha:
+__________</p>
+<h3 id="diseño">Diseño</h3>
+<p>☐ La segmentación está en el plano: VLAN AV, VLAN de control, red
+corporativa y red de invitados, con las reglas entre ellas
+definidas.<br />
+☐ Los requisitos de seguridad están en el pliego: cifrado del control,
+cuentas gestionadas, registro de eventos y plan de firmware.<br />
+☐ Los equipos elegidos soportan gestión cifrada, cuentas con roles y
+actualización de firmware firmada.<br />
+☐ Está definido qué tráfico necesita cruzar entre segmentos y qué queda
+bloqueado.<br />
+☐ Está definido quién administra el equipo después de la entrega.</p>
+<h3 id="implementación">Implementación</h3>
+<p>☐ Se cambiaron todas las credenciales de fábrica; no queda ninguna
+cuenta por defecto activa.<br />
+☐ Las cuentas son nominales o gestionadas; nada de una contraseña
+compartida.<br />
+☐ Los servicios y protocolos sin uso están apagados.<br />
+☐ La gestión del equipo va por canal cifrado, con certificado válido
+donde el equipo lo permita.<br />
+☐ El firmware está en la última versión estable y quedó anotada.<br />
+☐ El equipo está en su VLAN y se verificó que no alcanza la red
+corporativa ni la de invitados.<br />
+☐ El acceso físico al rack está controlado y los puertos de red sin uso
+están deshabilitados.<br />
+☐ Se hizo una verificación sobre la red del proyecto, con autorización
+del cliente, y se guardó el resultado.</p>
+<h3 id="entrega">Entrega</h3>
+<p>☐ Está documentada la lista de puertos y servicios de cada equipo,
+para IT.<br />
+☐ Los registros de eventos están activos y se envían a donde IT los
+pueda ver.<br />
+☐ Hay responsable y calendario para las actualizaciones de
+firmware.<br />
+☐ Existe respaldo de la configuración de cada equipo, guardado fuera del
+propio equipo.<br />
+☐ El cliente recibió el inventario: equipo, ubicación, dirección,
+versión de firmware y cuenta administradora.<br />
+☐ Quedó acordado qué hacer ante un incidente: a quién se avisa y qué se
+aísla primero.<br />
+☐ Las credenciales de administración se entregaron de forma segura.</p>
+<hr />
+<h2 id="guion-de-preguntas-de-it-con-respuestas-y-evidencia">3. Guion de
+preguntas de IT, con respuestas y evidencia</h2>
+<p>Llega a la reunión con estas respuestas listas.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pregunta de IT</th>
+<th>Respuesta que debes tener</th>
+<th>Evidencia que conviene llevar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>¿Qué puertos y servicios usa cada equipo?</td>
+<td>Lista por equipo, con el motivo de cada uno.</td>
+<td>Tabla de puertos y servicios.</td>
+</tr>
+<tr class="even">
+<td>¿En qué red va a estar?</td>
+<td>En la VLAN AV, separada de corporativa e invitados, con reglas
+explícitas.</td>
+<td>Diagrama de segmentación y reglas.</td>
+</tr>
+<tr class="odd">
+<td>¿Qué tráfico cruza a la red corporativa?</td>
+<td>Solo lo acordado, por puertos concretos.</td>
+<td>Lista de flujos: origen, destino, puerto, propósito.</td>
+</tr>
+<tr class="even">
+<td>¿Cómo se gestionan las credenciales?</td>
+<td>Cuentas gestionadas y con roles; ninguna de fábrica activa.</td>
+<td>Inventario de cuentas por equipo.</td>
+</tr>
+<tr class="odd">
+<td>¿La gestión va cifrada?</td>
+<td>Sí; los protocolos sin cifrar están apagados.</td>
+<td>Configuración de servicios de cada equipo.</td>
+</tr>
+<tr class="even">
+<td>¿Cómo se actualizan?</td>
+<td>Versión anotada, responsable y calendario.</td>
+<td>Inventario con versiones y acuerdo de mantenimiento.</td>
+</tr>
+<tr class="odd">
+<td>¿Cómo se monitorea?</td>
+<td>Registros activos enviados al sistema de monitoreo de IT.</td>
+<td>Destino de los registros y muestra de eventos.</td>
+</tr>
+<tr class="even">
+<td>¿Qué acceso remoto tiene el fabricante o el integrador?</td>
+<td>Solo el acordado, por canal cifrado y revocable.</td>
+<td>Lista de accesos y cómo se desactivan.</td>
+</tr>
+<tr class="odd">
+<td>¿Hay respaldo de la configuración?</td>
+<td>Sí, fuera del equipo, con fecha.</td>
+<td>Ubicación y fecha del último respaldo.</td>
+</tr>
+<tr class="even">
+<td>¿Qué pasa si un equipo se compromete?</td>
+<td>Está aislado en su segmento; hay un contacto definido.</td>
+<td>Procedimiento breve de respuesta.</td>
+</tr>
+<tr class="odd">
+<td>¿Quién administra el equipo tras la entrega?</td>
+<td>Definido en el contrato.</td>
+<td>Acta de entrega con responsabilidades.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="guía-del-laboratorio-red-aislada-y-usb-de-arranque">4. Guía del
+laboratorio: red aislada y USB de arranque</h2>
+<p>El objetivo es tener un entorno propio y separado para practicar lo
+del taller sin tocar ninguna red ajena.</p>
+<h3 id="regla-de-oro">Regla de oro</h3>
+<p>Practica solo aquí. Nunca sobre la red de un recinto, de tu empresa o
+de un cliente. Un laboratorio aislado no es una recomendación de estilo:
+es lo que mantiene tu práctica dentro de la ley.</p>
+<h3 id="la-red-aislada">La red aislada</h3>
+<ul>
+<li>Un router propio, de uso exclusivo para el laboratorio, sin ningún
+cable ni enlace hacia tu red de casa, de la oficina o de internet si no
+lo necesitas.</li>
+<li>Un equipo AV de prueba que te pertenezca, con su configuración de
+fábrica, para observar cómo se anuncia y qué expone.</li>
+<li>Tu equipo de análisis conectado a esa misma red.</li>
+<li>Tu teléfono, si quieres repetir la parte de participación desde el
+navegador.</li>
+</ul>
+<p>Mantén este laboratorio físicamente y lógicamente separado. Si
+reutilizas un router viejo, restablécelo de fábrica y cámbiale la
+contraseña de administración antes de empezar.</p>
+<h3 id="usb-de-arranque-para-el-equipo-de-análisis">USB de arranque para
+el equipo de análisis</h3>
+<p>Una memoria USB arrancable con una distribución de seguridad te da
+las herramientas del taller, como el escaneo de red y el análisis de
+tráfico, sin instalar nada en tu equipo. Una opción común y gratuita es
+Kali Linux.</p>
+<p>Pasos generales, usando siempre la documentación oficial para no
+fijar una versión que luego quede vieja:</p>
+<ol type="1">
+<li><strong>Descarga la imagen oficial.</strong> Ve a
+<code>kali.org/get-kali</code> y descarga la imagen de instalador o
+“Live” más reciente. La versión Live permite arrancar desde la USB sin
+instalar.</li>
+<li><strong>Verifica la integridad.</strong> Compara la suma de
+verificación SHA-256 de tu archivo con la que publica el sitio oficial.
+Si no coinciden, no uses esa descarga. El procedimiento está en
+<code>kali.org/docs/introduction/download-official-kali-linux-images</code>.</li>
+<li><strong>Graba la USB.</strong> Usa una memoria de 8 GB o más; se
+borra por completo.
+<ul>
+<li><strong>Windows:</strong> la herramienta recomendada es balenaEtcher
+o Rufus.</li>
+<li><strong>macOS:</strong> balenaEtcher, o el comando <code>dd</code>
+desde la Terminal.</li>
+<li><strong>Linux:</strong> balenaEtcher, o <code>dd</code> indicando
+con cuidado el dispositivo correcto. La guía oficial está en
+<code>kali.org/docs/usb/</code>.</li>
+</ul></li>
+<li><strong>Arranca desde la USB.</strong> Entra al menú de arranque de
+tu equipo, normalmente con F12, F2, Esc o Supr según el fabricante, y
+elige la memoria USB. Trabaja solo contra tu laboratorio aislado.</li>
+</ol>
+<p>Alternativa sin USB: si prefieres no arrancar desde la memoria,
+puedes correr la misma distribución dentro de una máquina virtual con
+VirtualBox, conectada a una red interna aislada. Kali publica imágenes
+ya preparadas para máquinas virtuales.</p>
+<h3 id="qué-practicar">Qué practicar</h3>
+<ul>
+<li>Observar cómo un equipo AV se anuncia en la red con protocolos de
+descubrimiento, y leer ese tráfico con un analizador de paquetes.</li>
+<li>Mapear qué hay en tu red de laboratorio y qué puertos y servicios
+expone cada equipo.</li>
+<li>Repetir el checklist de hardening sobre tu equipo de prueba y
+comprobar el antes y el después.</li>
+</ul>
+<hr />
+<h2 id="contacto">Contacto</h2>
+<p>¿Dudas, un proyecto o seguir la conversación? Escríbenos.</p>
+<ul>
+<li><strong>Juan Pineda</strong> · Pyxis — juan.pineda@pyxis.com ·
+linkedin.com/in/jdpinedac</li>
+<li><strong>Eduardo Travi</strong> · AVI SPL — Eduardo.Travi@avispl.com
+· linkedin.com/in/eduardotravi</li>
+</ul>
+<h2 id="referencias">5. Referencias</h2>
+<ul>
+<li>NIST Cybersecurity Framework 2.0: nist.gov/cyberframework</li>
+<li>MITRE ATT&amp;CK: attack.mitre.org</li>
+<li>MITRE ATT&amp;CK explicado, con video:
+ibm.com/mx-es/think/topics/mitre-attack</li>
+<li>Cyber Kill Chain, Lockheed Martin:
+lockheedmartin.com/en-us/capabilities/cyber/cyber-kill-chain.html</li>
+<li>CIS Critical Security Controls v8.1:
+cisecurity.org/controls/cis-controls-list</li>
+<li>Nmap: nmap.org</li>
+<li>Wireshark: wireshark.org</li>
+<li>Kali Linux: kali.org/get-kali</li>
+</ul>
+<hr />
+<p><em>Material educativo del taller. Las marcas de equipos se omiten a
+propósito. Esto no es asesoría legal: consulta la normativa vigente de
+tu país.</em></p>
+</body>
+</html>
