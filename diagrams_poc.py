@@ -39,10 +39,13 @@ def _banner(slide, y, text, h=0.85, size=13.5, sub=None):
     return b
 
 
-def _panel(slide, x, y, w, h, col, head, items, head_h=0.82, size=11.5, sub=None):
+def _panel(slide, x, y, w, h, col, head, items, head_h=0.82, size=11.5, sub=None, head_shape="rect"):
     rrect(slide, x, y, w, h, WHITE, line=LINE, radius=0.06)
-    hd = rrect(slide, x, y, w, head_h, col, radius=0.06)
-    _settext(hd.text_frame, [(head, 13.5, True, WHITE, PP_ALIGN.CENTER)])
+    if head_shape == "chevron":
+        chevron(slide, x, y, w, head_h, col, head)
+    else:
+        hd = rrect(slide, x, y, w, head_h, col, radius=0.06)
+        _settext(hd.text_frame, [(head, 13.5, True, WHITE, PP_ALIGN.CENTER)])
     y0 = y + head_h + 0.16
     if sub:
         textbox(slide, x + 0.28, y0, w - 0.56, 0.4, [(sub, 12, True, col, PP_ALIGN.LEFT)])
@@ -60,7 +63,8 @@ def _twocol(slide, s):
     for i, p in enumerate(panels):
         x = LEFT + i * (w + gap)
         _panel(slide, x, top, w, h, _color(p["col"]), p["head"], p["items"],
-               head_h=p.get("head_h", 0.82), size=p.get("size", 11.5), sub=p.get("sub"))
+               head_h=p.get("head_h", 0.82), size=p.get("size", 11.5), sub=p.get("sub"),
+               head_shape=p.get("head_shape", "rect"))
     if has_banner:
         _banner(slide, top + h + 0.3, s["banner"], sub=s.get("banner_sub"))
 

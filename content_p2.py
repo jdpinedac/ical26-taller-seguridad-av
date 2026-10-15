@@ -34,15 +34,15 @@ SLIDES_P2 = [
     "title": "La trampa del integrador: ni negligencia ni bloqueo ciego",
     "layout": "twocol",
     "panels": [
-      {"col": "red", "head": "Extremo 1: negligencia por comodidad", "head_h": 0.95, "size": 11, "items": [
+      {"col": "red", "head": "Extremo 1: negligencia por comodidad", "head_h": 0.95, "size": 11, "head_shape": "chevron", "items": [
         "Desactivar cifrados (SRTP / TLS) para evitar demoras.",
         "APIs de automatización abiertas y con credenciales por defecto.",
         "Redes de sala sin validación ni inspección."]},
-      {"col": "teal", "head": "El rol del integrador moderno", "head_h": 0.95, "size": 11, "items": [
+      {"col": "teal", "head": "El rol del integrador moderno", "head_h": 0.95, "size": 11, "head_shape": "chevron", "items": [
         "La IA y la nube llegaron a la sala sin pedir permiso.",
         "Nuestro valor no es bloquear ni ser laxos:",
         "es diseñar con los marcos de IT (CIA, NIST) desde el plano inicial."]},
-      {"col": "red", "head": "Extremo 2: seguridad por oscuridad", "head_h": 0.95, "size": 11, "items": [
+      {"col": "red", "head": "Extremo 2: seguridad por oscuridad", "head_h": 0.95, "size": 11, "head_shape": "chevron", "items": [
         "Desconectar el equipo o prohibir la integración con IA.",
         "Bloqueos ciegos que frustran la adopción del usuario.",
         "Soluciones que degradan la productividad del negocio."]},
