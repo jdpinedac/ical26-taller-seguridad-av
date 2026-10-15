@@ -299,3 +299,10 @@ SLIDES = [
     "small": "Eduardo Travi, de AVI SPL, continúa con la prueba de concepto sobre telefonía SIP.",
   },
 ]
+
+# Parte 2 (Eduardo Travi, AVI SPL): se arma en su propio módulo y se concatena.
+# La lámina de cierre "Llévate el kit" (QR + contactos) se mueve al final del
+# deck combinado, para cerrar con ella después de la parte de Eduardo.
+from content_p2 import SLIDES_P2
+_closing = [s for s in SLIDES if s["kind"] == "closing"]
+SLIDES = [s for s in SLIDES if s["kind"] != "closing"] + SLIDES_P2 + _closing

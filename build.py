@@ -10,6 +10,7 @@ import zipfile, shutil, re, os, subprocess
 import content as C
 from embed_fonts import embed as embed_fonts
 import diagrams
+import diagrams_poc
 
 FONT = "Montserrat"
 FONT_MED = "Montserrat Medium"
@@ -274,6 +275,16 @@ def main():
             slide = prs.slides.add_slide(L[L_CONTENT])
             set_title(slide, s["title"])
             diagrams.d_kit(slide, prs, s.get("shot", "QR al kit descargable"))
+
+        elif k == "poc":
+            # Parte 2 (Eduardo): etiqueta de fase + dos tarjetas con viñetas
+            slide = prs.slides.add_slide(L[L_CONTENT])
+            set_title(slide, s["title"])
+            diagrams_poc.d_poc(slide, prs, s)
+
+        # notas del orador (guion de la lámina); no salen en el PDF
+        if s.get("notes"):
+            slide.notes_slide.notes_text_frame.text = s["notes"].strip()
 
     prs.save(OUT)
     swap_fonts(OUT)
