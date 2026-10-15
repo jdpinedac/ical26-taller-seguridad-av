@@ -17,6 +17,29 @@ FULL = 11.5
 RIGHT = LEFT + FULL
 SW = 13.333
 BODY_TOP = 2.5
+TOP_LIM = 2.45          # debajo de la banda gris de subtítulo
+BOT_LIM = 6.55          # encima del logo del pie
+BAND = BOT_LIM - TOP_LIM
+
+
+def _ceil_div(a, b):
+    return -(-a // b)
+
+
+def _measure(items, w, size, header_h, has_sub=False, min_h=1.7):
+    """Alto aproximado de una tarjeta según su contenido, para no dejar aire."""
+    cpl = max(12, int(w * (11.0 if size <= 11.5 else 10.3)))   # caracteres por línea
+    line_h = size / 72.0 * 1.3
+    body = 0.14
+    for it in items:
+        lines = max(1, _ceil_div(len(it), cpl))
+        body += lines * line_h + 0.09
+    h = header_h + (0.42 if has_sub else 0.0) + body + 0.16
+    return max(min_h, h)
+
+
+def _block_top(block_h):
+    return TOP_LIM + max(0.0, (BAND - block_h) / 2)
 
 
 def _color(name):
@@ -92,9 +115,11 @@ def _cards_header(slide, s):
     panels = s["panels"]
     n = len(panels); gap = 0.35 if n == 2 else 0.3
     w = (FULL - gap * (n - 1)) / n
-    top = BODY_TOP
     has_bot = bool(s.get("banner"))
-    h = 2.95 if has_bot else 3.75
+    h = max(_measure(p["items"], w - 0.56, p.get("size", 11.5), 0.62,
+                     has_sub=bool(p.get("sub")), min_h=2.1) for p in panels)
+    block = h + (0.28 + 0.78 if has_bot else 0.0)
+    top = _block_top(block)
     for i, p in enumerate(panels):
         x = LEFT + i * (w + gap)
         _hcard(slide, x, top, w, h, _color(p["col"]), p["head"], p["items"],
@@ -107,9 +132,12 @@ def _chevrons(slide, s):
     cols = s["cols"]
     n = len(cols); gap = 0.3; ov = 0.45
     w = (FULL + (n - 1) * ov) / n
-    top = BODY_TOP; ch = 0.9
-    ctop = top + ch + 0.18; cardh = 2.55
     cw = (FULL - (n - 1) * gap) / n
+    ch = 0.9
+    cardh = max(_measure(c["items"], cw - 0.44, 11.5, 0.1, min_h=1.5) for c in cols)
+    block = ch + 0.18 + cardh
+    top = _block_top(block)
+    ctop = top + ch + 0.18
     for i, c in enumerate(cols):
         col = _color(c["col"])
         x = LEFT + i * (w - ov)
@@ -124,9 +152,9 @@ def _topbar(slide, s):
     cards = s["cards"]
     n = len(cards); gap = 0.3
     w = (FULL - gap * (n - 1)) / n
-    top = BODY_TOP
-    h = s.get("card_h", 3.75)
     bullet = s.get("bullet", True)
+    h = max(_measure(c["items"], w - 0.56, c.get("size", 11.5), 0.72, min_h=1.7) for c in cards)
+    top = _block_top(h)
     for i, c in enumerate(cards):
         x = LEFT + i * (w + gap)
         _tcard(slide, x, top, w, h, _color(c["col"]), c["head"], c["items"],
@@ -134,8 +162,10 @@ def _topbar(slide, s):
 
 
 def _hosts_premise(slide, s):
-    top = BODY_TOP
     lw = 5.0
+    n = len(s["hosts"])
+    col_h = n * 0.82 + (n - 1) * 0.16
+    top = _block_top(col_h)
     centers, col_h = _host_col(slide, s["hosts"], LEFT, lw, top)
     # conector vertical + puntos + flecha hacia el panel de la premisa
     bx = LEFT + lw + 0.4
@@ -155,9 +185,11 @@ def _hosts_premise(slide, s):
 
 
 def _hosts_command(slide, s):
-    top = BODY_TOP
     rw = 5.4
     rx = RIGHT - rw
+    n = len(s["hosts"])
+    col_h = n * 0.82 + (n - 1) * 0.16
+    top = _block_top(col_h)
     centers, col_h = _host_col(slide, s["hosts"], rx, rw, top)
     # caja de comando a la izquierda
     cw = rx - 0.5 - LEFT
