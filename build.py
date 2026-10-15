@@ -279,7 +279,14 @@ def main():
         elif k == "poc":
             # Parte 2 (Eduardo): etiqueta de fase + dos tarjetas con viñetas
             slide = prs.slides.add_slide(L[L_CONTENT])
-            set_title(slide, s["title"])
+            ph = set_title(slide, s["title"])
+            # títulos de Eduardo más largos: achicamos para que quepan en <=3 líneas
+            if ph is not None:
+                ph.text_frame.word_wrap = True
+                ph.text_frame.auto_size = MSO_AUTO_SIZE.NONE
+                for para in ph.text_frame.paragraphs:
+                    for r in para.runs:
+                        r.font.size = Pt(s.get("title_size", 24))
             diagrams_poc.d_poc(slide, prs, s)
 
         # notas del orador (guion de la lámina); no salen en el PDF

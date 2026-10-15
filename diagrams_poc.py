@@ -1,18 +1,22 @@
 # -*- coding: utf-8 -*-
 # Parte 2 del deck (Eduardo Travi, AVI SPL): la prueba de concepto con SIP.
-# Layouts genéricos y reutilizables. Todo el texto llega como datos desde
-# content.py; aquí sólo vive la maquetación, con los mismos helpers y la
-# misma paleta que la parte 1 para que el deck se lea como uno solo.
+# Objetivo: reproducir sus láminas lo más fiel posible (mismos títulos, textos y
+# colores que él ya tomó de la parte 1), solo renderizadas con nuestros helpers y
+# tipografía. Todo el contenido llega como datos desde content_p2.py.
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 import diagrams as D
 from diagrams import (rrect, oval, textbox, _settext, card, chevron, arrow, link,
-                      INDIGO, BLUE, ORANGE, MAGENTA, TEAL, GREEN, RED, WHITE, GREY, LILAC)
+                      INDIGO, BLUE, ORANGE, MAGENTA, TEAL, GREEN, RED, WHITE, GREY, LILAC, PALE)
 
 LINE = RGBColor(0xDD, 0xDD, 0xE5)
+GREYBAN = RGBColor(0xEC, 0xEF, 0xF7)   # banda gris/lavanda del subtítulo (como Eduardo)
 LEFT = 0.92
 FULL = 11.5
+RIGHT = LEFT + FULL
+SW = 13.333
+BODY_TOP = 2.5
 
 
 def _color(name):
@@ -20,140 +24,170 @@ def _color(name):
             "green": GREEN, "red": RED, "indigo": INDIGO, "grey": GREY}.get(name, BLUE)
 
 
-def _bullets(slide, x, y, w, h, items, size=11.5, color=INDIGO, anchor=MSO_ANCHOR.TOP, space=6):
+def _bullets(slide, x, y, w, h, items, size=11.5, color=INDIGO, anchor=MSO_ANCHOR.TOP, space=6, bullet=True):
     tb = slide.shapes.add_textbox(Inches(x), Inches(y), Inches(w), Inches(h))
     tf = tb.text_frame; tf.word_wrap = True; tf.vertical_anchor = anchor
+    pre = "•  " if bullet else ""
     for j, it in enumerate(items):
         p = tf.paragraphs[0] if j == 0 else tf.add_paragraph(); p.space_after = Pt(space)
-        r = p.add_run(); r.text = "•  " + it
+        r = p.add_run(); r.text = pre + it
         r.font.size = Pt(size); r.font.color.rgb = color; r.font.name = D.FONT
     return tb
 
 
-def _banner(slide, y, text, h=0.85, size=13.5, sub=None):
+def _topbanner(slide, text):
+    if not text:
+        return
+    b = rrect(slide, LEFT, 1.78, FULL, 0.5, GREYBAN, radius=0.14)
+    _settext(b.text_frame, [(text, 13, True, INDIGO, PP_ALIGN.CENTER)])
+
+
+def _botbanner(slide, y, text, h=0.78, size=14, sub=None):
     b = rrect(slide, LEFT, y, FULL, h, INDIGO, radius=0.1)
     items = [(text, size, True, WHITE, PP_ALIGN.CENTER)]
     if sub:
         items.append((sub, 10.5, False, LILAC, PP_ALIGN.CENTER))
     _settext(b.text_frame, items)
-    return b
 
 
-def _panel(slide, x, y, w, h, col, head, items, head_h=0.82, size=11.5, sub=None, head_shape="rect"):
+# ---------- tarjeta con cabecera de color completa (+ subtítulo opcional) ----------
+def _hcard(slide, x, y, w, h, col, head, items, sub=None, size=11.5):
     rrect(slide, x, y, w, h, WHITE, line=LINE, radius=0.06)
-    if head_shape == "chevron":
-        chevron(slide, x, y, w, head_h, col, head)
-    else:
-        hd = rrect(slide, x, y, w, head_h, col, radius=0.06)
-        _settext(hd.text_frame, [(head, 13.5, True, WHITE, PP_ALIGN.CENTER)])
-    y0 = y + head_h + 0.16
+    hd = rrect(slide, x, y, w, 0.62, col, radius=0.06)
+    _settext(hd.text_frame, [(head, 13, True, WHITE, PP_ALIGN.CENTER)])
+    y0 = y + 0.62 + 0.14
     if sub:
-        textbox(slide, x + 0.28, y0, w - 0.56, 0.4, [(sub, 12, True, col, PP_ALIGN.LEFT)])
-        y0 += 0.42
+        textbox(slide, x + 0.28, y0, w - 0.56, 0.36, [(sub, 12.5, True, col, PP_ALIGN.LEFT)])
+        y0 += 0.4
     _bullets(slide, x + 0.28, y0, w - 0.56, y + h - y0 - 0.12, items, size=size)
 
 
-# ---------- layout: columnas de paneles (2 ó 3) + banner opcional ----------
-def _twocol(slide, s):
+# ---------- tarjeta con franja de color superior y título índigo dentro ----------
+def _tcard(slide, x, y, w, h, col, head, items, size=11.5, bullet=True):
+    rrect(slide, x, y, w, h, WHITE, line=LINE, radius=0.06)
+    rrect(slide, x, y, w, 0.11, col, radius=0.0)
+    textbox(slide, x + 0.28, y + 0.22, w - 0.56, 0.4, [(head, 13, True, INDIGO, PP_ALIGN.LEFT)])
+    _bullets(slide, x + 0.28, y + 0.72, w - 0.56, h - 0.85, items, size=size, bullet=bullet)
+
+
+# ---------- columna de hosts, devuelve los centros verticales ----------
+def _host_col(slide, hosts, x, w, top, hh=0.82, gap=0.16):
+    centers = []
+    for i, hst in enumerate(hosts):
+        yy = top + i * (hh + gap)
+        col = _color(hst["col"])
+        c = rrect(slide, x, yy, w, hh, WHITE, line=col, radius=0.1)
+        _settext(c.text_frame, [
+            (hst["name"], 12, True, col, PP_ALIGN.LEFT),
+            (hst["role"], 9.5, False, GREY, PP_ALIGN.LEFT),
+        ], anchor=MSO_ANCHOR.MIDDLE)
+        centers.append(yy + hh / 2)
+    col_h = len(hosts) * hh + (len(hosts) - 1) * gap
+    return centers, col_h
+
+
+# ====================== layouts ======================
+
+def _cards_header(slide, s):
     panels = s["panels"]
     n = len(panels); gap = 0.35 if n == 2 else 0.3
     w = (FULL - gap * (n - 1)) / n
-    top = 1.8; has_banner = bool(s.get("banner"))
-    h = 3.3 if has_banner else 4.35
+    top = BODY_TOP
+    has_bot = bool(s.get("banner"))
+    h = 2.95 if has_bot else 3.75
     for i, p in enumerate(panels):
         x = LEFT + i * (w + gap)
-        _panel(slide, x, top, w, h, _color(p["col"]), p["head"], p["items"],
-               head_h=p.get("head_h", 0.82), size=p.get("size", 11.5), sub=p.get("sub"),
-               head_shape=p.get("head_shape", "rect"))
-    if has_banner:
-        _banner(slide, top + h + 0.3, s["banner"], sub=s.get("banner_sub"))
+        _hcard(slide, x, top, w, h, _color(p["col"]), p["head"], p["items"],
+               sub=p.get("sub"), size=p.get("size", 11.5))
+    if has_bot:
+        _botbanner(slide, top + h + 0.28, s["banner"])
 
 
-# ---------- layout: lista de hosts a la izquierda + panel/comando a la derecha ----------
-def _hosts(slide, s):
-    hosts = s["hosts"]
-    top = 1.95; hh = 0.72; gap = 0.14
-    lw = 5.2
-    col_h = len(hosts) * hh + (len(hosts) - 1) * gap
-    for i, hst in enumerate(hosts):
-        y = top + i * (hh + gap)
-        col = _color(hst["col"])
-        c = rrect(slide, LEFT, y, lw, hh, WHITE, line=col, radius=0.1)
-        _settext(c.text_frame, [
-            ("%s  (%s)" % (hst["name"], hst["ip"]), 12, True, col, PP_ALIGN.LEFT),
-            (hst["role"], 9.5, False, GREY, PP_ALIGN.LEFT),
-        ], anchor=MSO_ANCHOR.MIDDLE)
-    rx = LEFT + lw + 0.6
-    rw = 12.42 - rx
-    if s.get("command"):
-        # caja de comando (consola) + etiqueta
-        lbl = s.get("command_label", "Comando")
-        box = rrect(slide, rx, top, rw, col_h, INDIGO, radius=0.08)
-        tf = box.text_frame; tf.word_wrap = True; tf.vertical_anchor = MSO_ANCHOR.MIDDLE
-        p = tf.paragraphs[0]; p.alignment = PP_ALIGN.CENTER
-        r = p.add_run(); r.text = lbl; r.font.size = Pt(12.5); r.font.bold = True
-        r.font.color.rgb = LILAC; r.font.name = D.FONT
-        p2 = tf.add_paragraph(); p2.alignment = PP_ALIGN.CENTER; p2.space_before = Pt(10)
-        r2 = p2.add_run(); r2.text = s["command"]
-        r2.font.size = Pt(13); r2.font.bold = True; r2.font.color.rgb = WHITE
-        r2.font.name = "Consolas"
-    else:
-        rp = s["right"]
-        col = _color(rp.get("col", "indigo"))
-        rrect(slide, rx, top, rw, col_h, WHITE, line=LINE, radius=0.08)
-        rrect(slide, rx, top, rw, 0.7, col, radius=0.08)
-        textbox(slide, rx, top, rw, 0.7, [(rp["head"], 13.5, True, WHITE, PP_ALIGN.CENTER)],
-                anchor=MSO_ANCHOR.MIDDLE)
-        if rp.get("quote"):
-            q = rrect(slide, rx + 0.3, top + 0.95, rw - 0.6, col_h - 1.3, D.PALE, radius=0.08)
-            _settext(q.text_frame, [(rp["quote"], 13, False, INDIGO, PP_ALIGN.CENTER)])
-        else:
-            _bullets(slide, rx + 0.3, top + 0.9, rw - 0.6, col_h - 1.1, rp["items"], size=11.5)
-    if s.get("banner"):
-        _banner(slide, top + col_h + 0.3, s["banner"], sub=s.get("banner_sub"))
+def _chevrons(slide, s):
+    cols = s["cols"]
+    n = len(cols); gap = 0.3; ov = 0.45
+    w = (FULL + (n - 1) * ov) / n
+    top = BODY_TOP; ch = 0.9
+    ctop = top + ch + 0.18; cardh = 2.55
+    cw = (FULL - (n - 1) * gap) / n
+    for i, c in enumerate(cols):
+        col = _color(c["col"])
+        x = LEFT + i * (w - ov)
+        chevron(slide, x, top, w, ch, col, c["head"])
+        cx = LEFT + i * (cw + gap)
+        rrect(slide, cx, ctop, cw, cardh, WHITE, line=LINE, radius=0.07)
+        rrect(slide, cx, ctop, cw, 0.1, col, radius=0.0)
+        _bullets(slide, cx + 0.22, ctop + 0.22, cw - 0.44, cardh - 0.4, c["items"], size=11.5)
 
 
-# ---------- layout: mapeo "falla → control" (remediación) ----------
-def _mapping(slide, s):
-    rows = s["rows"]
-    top = 1.85; h = 0.6; gap = 0.13
-    lw = 5.1; aw = 0.5; rw = FULL - lw - aw - 0.3
-    for i, (left, right) in enumerate(rows):
-        y = top + i * (h + gap)
-        col = D.PALETTE[i % len(D.PALETTE)]
-        lb = rrect(slide, LEFT, y, lw, h, WHITE, line=col, radius=0.1)
-        _settext(lb.text_frame, [(left, 11.5, True, col, PP_ALIGN.LEFT)])
-        arrow(slide, LEFT + lw + 0.05, y + h / 2, LEFT + lw + aw - 0.05, y + h / 2, color=col, width=2.0)
-        rb = rrect(slide, LEFT + lw + aw, y, rw, h, WHITE, line=LINE, radius=0.1)
-        _settext(rb.text_frame, [(right, 11.5, False, INDIGO, PP_ALIGN.LEFT)])
-    if s.get("banner"):
-        bottom = top + len(rows) * h + (len(rows) - 1) * gap
-        _banner(slide, bottom + 0.2, s["banner"], h=0.72, sub=s.get("banner_sub"))
+def _topbar(slide, s):
+    cards = s["cards"]
+    n = len(cards); gap = 0.3
+    w = (FULL - gap * (n - 1)) / n
+    top = BODY_TOP
+    h = s.get("card_h", 3.75)
+    bullet = s.get("bullet", True)
+    for i, c in enumerate(cards):
+        x = LEFT + i * (w + gap)
+        _tcard(slide, x, top, w, h, _color(c["col"]), c["head"], c["items"],
+               size=c.get("size", 11.5), bullet=bullet)
 
 
-# ---------- layout: fila de tarjetas (reutiliza el helper de la parte 1) ----------
-def _cards(slide, prs, s):
-    cards = [(_color(c["col"]), c["head"], c["desc"]) for c in s["cards"]]
-    top = 2.1 if not s.get("subtitle") else 2.5
-    if s.get("subtitle"):
-        textbox(slide, LEFT, 1.75, FULL, 0.5, [(s["subtitle"], 13, False, GREY, PP_ALIGN.CENTER)],
-                anchor=MSO_ANCHOR.MIDDLE)
-    D.cards_row(slide, prs, cards, top=top, h=3.0)
-    if s.get("banner"):
-        _banner(slide, top + 3.0 + 0.3, s["banner"], sub=s.get("banner_sub"))
+def _hosts_premise(slide, s):
+    top = BODY_TOP
+    lw = 5.0
+    centers, col_h = _host_col(slide, s["hosts"], LEFT, lw, top)
+    # conector vertical + puntos + flecha hacia el panel de la premisa
+    bx = LEFT + lw + 0.4
+    link(slide, bx, centers[0], bx, centers[-1], color=RGBColor(0xB8, 0xBC, 0xC6), width=2.2)
+    cy = (centers[0] + centers[-1]) / 2
+    for cyi in centers:
+        oval(slide, bx - 0.06, cyi - 0.06, 0.12, 0.12, RGBColor(0xB8, 0xBC, 0xC6))
+        link(slide, LEFT + lw, cyi, bx, cyi, color=RGBColor(0xB8, 0xBC, 0xC6), width=1.6)
+    px = bx + 0.5; pw = RIGHT - px
+    arrow(slide, bx, cy, px - 0.03, cy, color=INDIGO, width=2.5)
+    pr = s["premise"]
+    rrect(slide, px, top, pw, col_h, INDIGO, radius=0.08)
+    textbox(slide, px, top + 0.18, pw, 0.5, [(pr["head"], 14, True, WHITE, PP_ALIGN.CENTER)],
+            anchor=MSO_ANCHOR.MIDDLE)
+    q = rrect(slide, px + 0.3, top + 0.9, pw - 0.6, col_h - 1.2, PALE, radius=0.08)
+    _settext(q.text_frame, [(pr["quote"], 12.5, False, INDIGO, PP_ALIGN.CENTER)])
 
 
-_LAYOUTS = {"twocol": _twocol, "hosts": _hosts, "mapping": _mapping}
+def _hosts_command(slide, s):
+    top = BODY_TOP
+    rw = 5.4
+    rx = RIGHT - rw
+    centers, col_h = _host_col(slide, s["hosts"], rx, rw, top)
+    # caja de comando a la izquierda
+    cw = rx - 0.5 - LEFT
+    box = rrect(slide, LEFT, top, cw, col_h, INDIGO, radius=0.08)
+    textbox(slide, LEFT, top + 0.18, cw, 0.4, [(s.get("command_label", "Comando de Auditoría"),
+            13, True, WHITE, PP_ALIGN.CENTER)], anchor=MSO_ANCHOR.MIDDLE)
+    inner = rrect(slide, LEFT + 0.35, top + 0.85, cw - 0.7, col_h - 1.2, PALE, radius=0.08)
+    tf = inner.text_frame; tf.word_wrap = True; tf.vertical_anchor = MSO_ANCHOR.MIDDLE
+    p = tf.paragraphs[0]; p.alignment = PP_ALIGN.CENTER
+    r = p.add_run(); r.text = s["command"]; r.font.size = Pt(13); r.font.bold = True
+    r.font.color.rgb = INDIGO; r.font.name = "Consolas"
+    # conector vertical + flecha desde el comando hacia los hosts
+    bx = rx - 0.4
+    link(slide, bx, centers[0], bx, centers[-1], color=RGBColor(0xB8, 0xBC, 0xC6), width=2.2)
+    cy = (centers[0] + centers[-1]) / 2
+    for cyi in centers:
+        oval(slide, bx - 0.06, cyi - 0.06, 0.12, 0.12, RGBColor(0xB8, 0xBC, 0xC6))
+        link(slide, bx, cyi, rx, cyi, color=RGBColor(0xB8, 0xBC, 0xC6), width=1.6)
+    arrow(slide, LEFT + cw + 0.03, cy, bx, cy, color=INDIGO, width=2.5)
+
+
+_LAYOUTS = {
+    "cards_header": _cards_header,
+    "chevrons": _chevrons,
+    "topbar": _topbar,
+    "hosts_premise": _hosts_premise,
+    "hosts_command": _hosts_command,
+}
 
 
 def d_poc(slide, prs, s):
-    if s.get("tag"):
-        textbox(slide, LEFT, 1.55, FULL, 0.38, [(s["tag"], 12.5, True, BLUE, PP_ALIGN.LEFT)],
-                anchor=MSO_ANCHOR.MIDDLE)
-    lay = s["layout"]
-    if lay == "cards":
-        _cards(slide, prs, s)
-    elif lay in ("twocol", "mapping"):
-        _LAYOUTS[lay](slide, s)
-    elif lay == "hosts":
-        _hosts(slide, s)
+    _topbanner(slide, s.get("topbanner"))
+    _LAYOUTS[s["layout"]](slide, s)
