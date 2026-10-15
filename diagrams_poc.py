@@ -211,12 +211,39 @@ def _hosts_command(slide, s):
     arrow(slide, LEFT + cw + 0.03, cy, bx, cy, color=INDIGO, width=2.5)
 
 
+def _remediation(slide, s):
+    rows = s["rows"]
+    head = s["head"]; col = _color(s.get("col", "orange"))
+    inner_x = LEFT + 0.3
+    lw = 4.7; aw = 0.5
+    rx = inner_x + lw + aw
+    rw = (LEFT + FULL - 0.3) - rx
+    size = 12; line_h = size / 72.0 * 1.3
+    rhs = []
+    for fa, co in rows:
+        ll = max(1, _ceil_div(len(fa), int(lw * 10.5)))
+        rl = max(1, _ceil_div(len(co), int(rw * 10.5)))
+        rhs.append(max(ll, rl) * line_h + 0.24)
+    card_h = 0.72 + sum(rhs) + 0.18
+    top = _block_top(card_h)
+    rrect(slide, LEFT, top, FULL, card_h, WHITE, line=LINE, radius=0.06)
+    rrect(slide, LEFT, top, FULL, 0.11, col, radius=0.0)
+    textbox(slide, inner_x, top + 0.22, FULL - 0.6, 0.4, [(head, 13, True, INDIGO, PP_ALIGN.LEFT)])
+    y = top + 0.74
+    for (fa, co), rh in zip(rows, rhs):
+        textbox(slide, inner_x, y, lw, rh, [(fa, size, True, INDIGO, PP_ALIGN.LEFT)], anchor=MSO_ANCHOR.MIDDLE)
+        arrow(slide, inner_x + lw + 0.05, y + rh / 2, rx - 0.05, y + rh / 2, color=col, width=1.8)
+        textbox(slide, rx, y, rw, rh, [(co, size, False, INDIGO, PP_ALIGN.LEFT)], anchor=MSO_ANCHOR.MIDDLE)
+        y += rh
+
+
 _LAYOUTS = {
     "cards_header": _cards_header,
     "chevrons": _chevrons,
     "topbar": _topbar,
     "hosts_premise": _hosts_premise,
     "hosts_command": _hosts_command,
+    "remediation": _remediation,
 }
 
 

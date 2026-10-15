@@ -174,16 +174,16 @@ SLIDES_P2 = [
   },
   # ---------- 10: Remediación ----------
   {
-    "kind": "poc", "layout": "topbar", "card_h": 3.9,
+    "kind": "poc", "layout": "remediation",
     "title": "Remediación: Aplicando Defensa en Profundidad",
     "topbanner": "Cómo neutralizar cada etapa de la Kill Chain desde el diseño",
-    "cards": [
-      {"col": "orange", "head": "Falla en la Demo → Control Técnico que la Evita", "size": 12, "items": [
-        "Escaneo de red (nmap) → Control de acceso 802.1X + Microsegmentación.",
-        "Fuga de agenda por API → Contraseñas robustas + Restricción de IP para APIs.",
-        "Captura SIP en claro → SIP sobre TLS (puerto 5061) obligatorio.",
-        "Suplantación de softphone → Certificados mutuos de máquina (mTLS).",
-        "Audio sin cifrar → Cifrado AES / SRTP configurado como 'Requerido'."]},
+    "head": "Falla en la Demo → Control Técnico que la Evita",
+    "rows": [
+      ("Escaneo de red (nmap)", "Control de acceso 802.1X + Microsegmentación."),
+      ("Fuga de agenda por API", "Contraseñas robustas + Restricción de IP para APIs."),
+      ("Captura SIP en claro", "SIP sobre TLS (puerto 5061) obligatorio."),
+      ("Suplantación de softphone", "Certificados mutuos de máquina (mTLS)."),
+      ("Audio sin cifrar", "Cifrado AES / SRTP configurado como 'Requerido'."),
     ],
     "notes": "Ninguna de estas defensas es cara. Con 802.1X la laptop ni recibe IP; con la "
              "API restringida no hay fuga de agenda; con mTLS el proxy rechaza el softphone; "
