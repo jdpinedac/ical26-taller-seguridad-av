@@ -588,6 +588,10 @@ def d_lab(slide, prs):
         _settext(o.text_frame, [(num, 15, True, WHITE, PP_ALIGN.CENTER)])
         textbox(slide, 7.25, yy-0.04, 5.0, 0.8, [(txt, 11.5, False, INDIGO, PP_ALIGN.LEFT)], anchor=MSO_ANCHOR.MIDDLE)
         yy += 0.95
+    # nota Android: sin internet, Android manda el tráfico por datos móviles y el escáner no ve la red
+    textbox(slide, 7.25, 5.08, 5.0, 0.32,
+            [("Android: si el escáner no ve nada, apaga los datos móviles un momento.", 9.5, False, MAGENTA, PP_ALIGN.LEFT)],
+            anchor=MSO_ANCHOR.MIDDLE)
     # regla de oro
     warn = rrect(slide, 6.6, 5.45, 5.7, 0.95, RED, radius=0.1)
     _settext(warn.text_frame, [
