@@ -561,9 +561,13 @@ def d_lab(slide, prs):
     ax, ay = 3.35, 4.5
     # enlaces primero (van por detrás de las cajas)
     link(slide, rx + rw/2, ry + rh, rx + rw/2, ay, color=TEAL, width=2.0)          # router -> gateway de presentación (cable)
-    ph_y = [2.7, 3.8]
-    for yy in ph_y:
-        link(slide, 1.05 + 1.2, yy + 0.35, rx, ry + rh/2, color=MAGENTA, width=1.6, dash=True)  # telefono -> router (WiFi)
+    clients = [(2.5, "tu teléfono"), (3.5, "el de tu vecino"), (4.6, "tu laptop (opcional)")]
+    # bus Wi-Fi punteado: cada cliente entra al bus con un tramo recto y el bus entra al router
+    bus_x = 2.62
+    for yy, _ in clients:
+        c = link(slide, 1.05 + 1.2, yy + 0.35, bus_x, yy + 0.35, color=MAGENTA, width=1.6, dash=True)
+    c = link(slide, bus_x, clients[0][0] + 0.35, bus_x, clients[-1][0] + 0.35, color=MAGENTA, width=1.6, dash=True)
+    c = link(slide, bus_x, ry + rh/2, rx, ry + rh/2, color=MAGENTA, width=1.6, dash=True)
     # cajas
     router = rrect(slide, rx, ry, rw, rh, BLUE, radius=0.1)
     _settext(router.text_frame, [("Router WiFi del laboratorio", 11.5, True, WHITE, PP_ALIGN.CENTER),
@@ -571,10 +575,10 @@ def d_lab(slide, prs):
     am = rrect(slide, ax, ay, rw, 0.82, TEAL, radius=0.1)
     _settext(am.text_frame, [("Gateway de presentación inalámbrica", 11.5, True, WHITE, PP_ALIGN.CENTER),
                              ("dispositivo AV real", 9, False, RGBColor(0xDD,0xF2,0xF2), PP_ALIGN.CENTER)])
-    for yy in ph_y:
+    for yy, label in clients:
         ph = rrect(slide, 1.05, yy, 1.2, 0.7, WHITE, line=MAGENTA, radius=0.15)
-        _settext(ph.text_frame, [("tu teléfono", 9.5, True, MAGENTA, PP_ALIGN.CENTER)])
-    textbox(slide, 2.25, 3.08, 1.15, 0.35, [("Wi-Fi", 9, True, MAGENTA, PP_ALIGN.CENTER)], anchor=MSO_ANCHOR.MIDDLE)
+        _settext(ph.text_frame, [(label, 9.5, True, MAGENTA, PP_ALIGN.CENTER)])
+    textbox(slide, 2.66, 3.52, 0.7, 0.3, [("Wi-Fi", 9, True, MAGENTA, PP_ALIGN.LEFT)], anchor=MSO_ANCHOR.MIDDLE)
     # --- pasos para participar (derecha) ---
     textbox(slide, 6.6, 1.95, 5.7, 0.4, [("Para participar", 15, True, INDIGO, PP_ALIGN.LEFT)])
     steps = [
@@ -589,8 +593,8 @@ def d_lab(slide, prs):
         textbox(slide, 7.25, yy-0.04, 5.0, 0.8, [(txt, 11.5, False, INDIGO, PP_ALIGN.LEFT)], anchor=MSO_ANCHOR.MIDDLE)
         yy += 0.95
     # nota Android: sin internet, Android manda el tráfico por datos móviles y el escáner no ve la red
-    textbox(slide, 7.25, 5.08, 5.0, 0.32,
-            [("Android: si el escáner no ve nada, apaga los datos móviles un momento.", 9.5, False, MAGENTA, PP_ALIGN.LEFT)],
+    textbox(slide, 6.6, 5.06, 5.7, 0.32,
+            [("Android: si el escáner no ve nada, apaga los datos móviles un momento.", 10, True, MAGENTA, PP_ALIGN.LEFT)],
             anchor=MSO_ANCHOR.MIDDLE)
     # regla de oro
     warn = rrect(slide, 6.6, 5.45, 5.7, 0.95, RED, radius=0.1)
