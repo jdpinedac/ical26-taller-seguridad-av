@@ -753,9 +753,10 @@ def d_kit(slide, prs, qr_caption):
     import os as _os
     rrect(slide, qx, qy, qs, qs, WHITE, line=RGBColor(0xDD,0xDD,0xE5), radius=0.1)
     if _os.path.exists("assets/qr.png"):
-        m = 0.45
-        slide.shapes.add_picture("assets/qr.png", Inches(qx + m), Inches(qy + m - 0.12), width=Inches(qs - 2*m))
-        textbox(slide, qx, qy + qs - 0.52, qs, 0.4, [("Escanea para descargar el kit", 11.5, True, INDIGO, PP_ALIGN.CENTER)], anchor=MSO_ANCHOR.MIDDLE)
+        m = 0.55
+        slide.shapes.add_picture("assets/qr.png", Inches(qx + m), Inches(qy + m - 0.20), width=Inches(qs - 2*m))
+        textbox(slide, qx, qy + qs - 0.70, qs, 0.28, [("Escanea para descargar el kit", 10.5, True, INDIGO, PP_ALIGN.CENTER)], anchor=MSO_ANCHOR.MIDDLE)
+        textbox(slide, qx, qy + qs - 0.40, qs, 0.32, [("ical2026.juanpineda.co", 12.5, True, BLUE, PP_ALIGN.CENTER)], anchor=MSO_ANCHOR.MIDDLE)
     else:
         textbox(slide, qx, qy, qs, qs, [(qr_caption, 14, True, INDIGO, PP_ALIGN.CENTER)], anchor=MSO_ANCHOR.MIDDLE)
     # contacto de los presentadores
